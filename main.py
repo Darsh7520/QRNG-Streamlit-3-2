@@ -32,6 +32,7 @@ page = st.sidebar.radio(
         "💣 Brute Force Attack",
         "🔁 Replay Attack",
         "📊 Statistical Analysis",
+        "🖼️ Pixel Intensity Histogram",
     ]
 )
 
@@ -68,6 +69,8 @@ if page == "🏠 Home":
       correlation a shared-seed PRNG gets, without that seed being a single
       point of failure.
     - **Statistical Analysis** -- Compare entropy and uniformity of PRNG vs QRNG shares.
+    - **Pixel Intensity Histogram** -- Visualize grayscale intensity or RGB channel
+      distributions for an uploaded image.
 
     ---
 
@@ -75,6 +78,7 @@ if page == "🏠 Home":
     1. Go to **XOR**, **Naor-Shamir**, or **Bell-Pair** Share Generation to generate shares.
     2. Use the **Attack** pages to demonstrate security properties.
     3. Use **Entanglement Correlation Analysis** and **Statistical Analysis** to compare randomness quality.
+    4. Use **Pixel Intensity Histogram** to explore an image's intensity distribution.
     """)
 
 elif page == "🔑 XOR Share Generation":
@@ -103,4 +107,8 @@ elif page == "🔁 Replay Attack":
 
 elif page == "📊 Statistical Analysis":
     from app_pages.stats_page import render
+    render()
+
+elif page == "🖼️ Pixel Intensity Histogram":
+    from app_pages.histogram_page import render
     render()
