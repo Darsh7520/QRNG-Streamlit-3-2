@@ -3,6 +3,7 @@ from PIL import Image
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from app_pages.image_downloads import show_image
 from naor_shamir import generate_ns_shares, combine_ns_shares
 
 
@@ -24,7 +25,7 @@ def render():
 
         if uploaded:
             image = Image.open(uploaded)
-            st.image(image, caption=f"Secret Image ({image.width}×{image.height})", use_container_width=True)
+            show_image(image, caption=f"Secret Image ({image.width}×{image.height})", width="stretch", filename='ns_secret.png')
 
     with col2:
         if uploaded and st.button("Generate Shares", type="primary"):
@@ -52,9 +53,9 @@ def render():
         st.subheader("Generated Shares")
         c1, c2 = st.columns(2)
         with c1:
-            st.image(st.session_state["ns_share1"], caption="Share 1", use_container_width=True)
+            show_image(st.session_state["ns_share1"], caption="Share 1", width="stretch", filename='ns_share_1.png')
         with c2:
-            st.image(st.session_state["ns_share2"], caption="Share 2", use_container_width=True)
+            show_image(st.session_state["ns_share2"], caption="Share 2", width="stretch", filename='ns_share_2.png')
 
         st.divider()
         st.subheader("Reconstruction")
@@ -63,5 +64,5 @@ def render():
                 st.session_state["ns_share1"],
                 st.session_state["ns_share2"]
             )
-            st.image(recovered, caption="Reconstructed via OR stacking", use_container_width=True)
+            show_image(recovered, caption="Reconstructed via OR stacking", width="stretch", filename='ns_reconstructed.png')
             st.info("Naor-Shamir reconstruction is perceptual not lossless. Black pixels appear dark grey after stacking.")

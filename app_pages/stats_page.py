@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from app_pages.image_downloads import show_image, show_figure
 from xor_vc import generate_xor_shares
 from attacks import analyze_share
 
@@ -29,7 +30,7 @@ def render():
         return
 
     image = Image.open(uploaded).convert('L').resize((128, 128))
-    st.image(image, caption="Secret Image (resized to 128×128)", width=200)
+    show_image(image, caption="Secret Image (resized to 128×128)", width=200, filename='stats_secret_128x128.png')
 
     if st.button("Run Statistical Comparison", type="primary"):
 
@@ -49,7 +50,7 @@ def render():
 
         with col1:
             st.markdown("### PRNG Share")
-            st.image(prng_s1, caption=f"PRNG Share (seed: {prng_seed})", use_container_width=True)
+            show_image(prng_s1, caption=f"PRNG Share (seed: {prng_seed})", width="stretch", filename='stats_prng_share.png')
             st.metric("Shannon Entropy", f"{prng_stats['entropy']} / 8.0 bits")
             st.metric("Chi-Square Statistic", f"{prng_stats['chi_square_stat']}")
             st.metric("Chi-Square p-value", f"{prng_stats['chi_square_p']}")
@@ -61,7 +62,7 @@ def render():
 
         with col2:
             st.markdown("### QRNG Share")
-            st.image(qrng_s1, caption="QRNG Share", use_container_width=True)
+            show_image(qrng_s1, caption="QRNG Share", width="stretch", filename='stats_qrng_share.png')
             st.metric("Shannon Entropy", f"{qrng_stats['entropy']} / 8.0 bits")
             st.metric("Chi-Square Statistic", f"{qrng_stats['chi_square_stat']}")
             st.metric("Chi-Square p-value", f"{qrng_stats['chi_square_p']}")
@@ -93,7 +94,8 @@ def render():
         axes[1].legend()
 
         plt.tight_layout()
-        st.pyplot(fig)
+        show_figure(fig, filename='stats_pixel_distribution.png')
+        plt.close(fig)
 
         st.divider()
         st.subheader("Summary")

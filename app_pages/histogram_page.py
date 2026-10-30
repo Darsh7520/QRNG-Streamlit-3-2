@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from app_pages.image_downloads import show_image, show_figure
 import matplotlib.pyplot as plt
 import numpy as np
 import streamlit as st
@@ -32,7 +36,7 @@ def render():
     grayscale_pixels = np.asarray(image.convert("L"))
     preview, details = st.columns([1.2, 1])
     with preview:
-        st.image(image, caption="Image preview", width="stretch")
+        show_image(image, caption="Image preview", width="stretch", filename='histogram_source.png')
     with details:
         st.subheader("Image details")
         st.metric("File name", uploaded.name)
@@ -73,7 +77,7 @@ def render():
     ax.set_xticks(list(range(0, 256, 32)) + [255])
     ax.grid(axis="y", alpha=0.25)
     fig.tight_layout()
-    st.pyplot(fig)
+    show_figure(fig, filename='pixel_intensity_histogram.png')
     plt.close(fig)
 
 

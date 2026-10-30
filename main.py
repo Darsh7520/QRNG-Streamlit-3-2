@@ -17,27 +17,59 @@ st.set_page_config(
 )
 
 # --- Sidebar ---
-st.sidebar.title("🔐 QEVC Demo")
-st.sidebar.markdown("Quantum Enhanced Visual Cryptography")
-st.sidebar.divider()
+st.sidebar.title("\U0001f510 QEVC Demo")
+st.sidebar.caption("Quantum Enhanced Visual Cryptography")
 
-page = st.sidebar.radio(
-    "Navigate",
-    [
-        "🏠 Home",
-        "🔑 XOR Share Generation",
-        "🧩 Naor-Shamir Share Generation",
-        "🌀 Bell-Pair Entangled VC",
-        "🔗 Entanglement Correlation Analysis",
-        "💣 Brute Force Attack",
-        "🔁 Replay Attack",
-        "📊 Statistical Analysis",
-        "🖼️ Pixel Intensity Histogram",
-    ]
-)
+home_page = '🏠 Home'
+navigation_sections = {
+    'Share Generation': [
+        '🔑 XOR Share Generation',
+        '🧩 Naor-Shamir Share Generation',
+        '🌀 Bell-Pair Entangled VC',
+    ],
+    'Attacks': [
+        '💣 Brute Force Attack',
+        '🔁 Replay Attack',
+    ],
+    'Analysis': [
+        '🔗 Entanglement Correlation Analysis',
+        '📊 Statistical Analysis',
+        '🖼️ Pixel Intensity Histogram',
+    ],
+}
 
-st.sidebar.divider()
-st.sidebar.caption("Built with Qiskit · Streamlit · NumPy · Pillow")
+if "active_page" not in st.session_state:
+    st.session_state["active_page"] = home_page
+
+navigation_groups = {"Home": [home_page], **navigation_sections}
+
+
+def select_page(group_key):
+    selected = st.session_state[group_key]
+    if selected is not None:
+        st.session_state["active_page"] = selected
+        for group in navigation_groups:
+            other_key = f"navigation_{group}"
+            if other_key != group_key:
+                st.session_state[other_key] = None
+
+
+for section, pages in navigation_groups.items():
+    group_key = f"navigation_{section}"
+    if group_key not in st.session_state:
+        active = st.session_state["active_page"]
+        st.session_state[group_key] = active if active in pages else None
+    st.sidebar.radio(
+        section,
+        pages,
+        index=None,
+        key=group_key,
+        label_visibility="collapsed" if section == "Home" else "visible",
+        on_change=select_page,
+        args=(group_key,),
+    )
+
+page = st.session_state["active_page"]
 
 # --- Pages ---
 
